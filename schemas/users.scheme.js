@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const id = Joi.string().uuid();
+const id = Joi.number().integer().min(1);
 const nombre = Joi.string().min(3).max(15);
 const email = Joi.string().email();
 const edad = Joi.number().min(18).max(80);

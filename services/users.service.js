@@ -22,66 +22,34 @@ class UsersService {
     }
   }
 
-  create(data) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const newUser = {
-          id: faker.datatype.uuid(),
-          ...data,
-        };
-        this.users.push(newUser);
-        resolve(newUser);
-      }, 300);
-    });
+  async create(data) {
+    const newUser = await models.User.create(data);
+    return newUser;
   }
 
   async find() {
-    //hacemos la búsqueda con el sequelize
     const data = await models.User.findAll();
     return data;
   }
 
-  findOne(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const user = this.users.find((item) => item.id === id);
-        if (!user) {
-          reject(boom.notFound("User not found"));
-        }
-        resolve (user);
-      }, 300);
-    });
+  async findOne(id) {
+    const user = await models.User.findByPk(id);
+    if (!user) {
+      throw boom.notFound("User not found");
+    }
+    return user;
   }
 
-  update(id, changes) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-      const index = this.users.findIndex((item) => item.id === id);
-      if (index === -1) {
-        reject(boom.notFound("User not found"));
-      }
-      const user = this.users[index];
-      this.users[index] = {
-        ...user,
-        ...changes,
-      };
-      resolve (this.users[index]);
-      }, 300);
-    });
+  async update(id, changes) {
+    const user = await this.findOne(id)
+    const updatedUser = await user.update(changes);
+    return updatedUser;
   }
 
-  delete(id) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        const index = this.users.findIndex((item) => item.id === id);
-        if (index === -1) {
-          reject(boom.notFound("User not found"));
-        } else {
-          this.users.splice(index, 1);
-          resolve({ id });
-        }
-      }, 300);
-    });
+  async delete(id) {
+    const user = await this.findOne(id)
+    await user.destroy();
+    return user;
   }
 }
 

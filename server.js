@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors"); // Importa el middleware cors
 const routerApi = require("./routes"); //index es el archivo por defecto
-const { logErrors, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
+const { logErrors, boomErrorHandler, errorHandler, sequelizeErrorHandler } = require("./middlewares/error.handler");
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +23,7 @@ routerApi(app);
 
 //middlewares de error
 app.use(logErrors);
+app.use(sequelizeErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
