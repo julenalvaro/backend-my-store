@@ -1,16 +1,12 @@
 const faker = require("faker");
 const boom = require("@hapi/boom");
-const pool = require("../libs/postgres.pool");
+const sequelize = require("./../libs/sequelize");
+
 
 class UsersService {
   constructor() {
     this.users = [];
     this.generateRandomUsers();
-    this.pool = pool;
-    this.pool.on('error', (err, client) => {
-      console.error('Unexpected error on idle client', err)
-      process.exit(-1)
-    });
   }
 
   generateRandomUsers() {
@@ -40,11 +36,11 @@ class UsersService {
   }
 
   async find() {
-    //hacemos la búsqueda con el pool
-    const client = await this.pool.connect();
-    const result = await client.query('SELECT * FROM prueba');
-    client.release();
-    return result.rows;
+    //hacemos la búsqueda con el sequelize
+    const data = await sequelize.query("SELECT * FROM prueba", {
+      type: sequelize.QueryTypes.SELECT,
+    });
+    return data;
   }
 
   findOne(id) {
