@@ -1,16 +1,14 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
+const { config } = require('./../config/config');
 
-async function getConnection(){
-  const client = new Client({
-    user: 'jalvaro',
-    host: 'localhost',
-    database: 'my-store',
-    password: '123456',
-    port: 5432,
-  });
+//No vamos variable por variable, las mandamos todas juntas en una URL
+//Las variables más sensibles las protegemos
 
-  await client.connect();
-  return client;
-};
+const USER = encodeURIComponent(config.dbUser);
+const PASSWORD = encodeURIComponent(config.dbPassword);
 
-module.exports = getConnection;
+const URI = `postgresql://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+
+const pool = new Pool({ connectionString: URI });
+
+module.exports = pool;
