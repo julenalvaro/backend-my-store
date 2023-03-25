@@ -1,6 +1,6 @@
 const faker = require("faker");
 const boom = require("@hapi/boom");
-const sequelize = require("./../libs/sequelize");
+const { models } = require("./../libs/sequelize");
 
 
 class UsersService {
@@ -37,9 +37,7 @@ class UsersService {
 
   async find() {
     //hacemos la búsqueda con el sequelize
-    const data = await sequelize.query("SELECT * FROM prueba", {
-      type: sequelize.QueryTypes.SELECT,
-    });
+    const data = await models.User.findAll();
     return data;
   }
 
