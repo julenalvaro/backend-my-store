@@ -1,0 +1,11 @@
+//Ya he visto varios archivos que terminan en rc, solo para satisfacer mi curiosidad lo investigue y les comparto:
+// rc: “run commands”, se usa en sistemas unix como pre-ejecutador de un archivo, carga esos comandos antes de proceder con la rutina normal de ejecución
+
+//Las migraciones de las BD se hacen desde la terminal y necesitan su propia conexión. Con este script le pasamos todos los datos necesarios para migrar la BD
+
+module.exports = {
+  'config': './db/config.js',
+  'models-path': './db/models/',
+  'seeders-path': './db/seeders/',
+  'migrations-path': './db/migrations/',
+};
