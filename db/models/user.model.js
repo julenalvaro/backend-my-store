@@ -13,16 +13,28 @@ const UserSchema = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-    email: {
+  email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
   },
-    edad: {
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      len: [8, 20],
+    },
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'customer',
+  },
+  edad: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-    fechaIngreso: {
+  fechaIngreso: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: Sequelize.NOW,
