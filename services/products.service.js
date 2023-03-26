@@ -1,60 +1,23 @@
-const faker = require("faker");
+
 const boom = require("@hapi/boom");
+const { models } = require("../libs/sequelize");
 
 class ProductsService {
-  constructor() {
-    this.products = [];
-    this.generateRandomProducts();
-  }
-
-  generateRandomProducts() {
-    const limit = 100;
-    for (let index = 0; index < limit; index++) {
-      this.products.push({
-        id: faker.datatype.uuid(),
-        nombre: faker.commerce.productName(),
-        precio: faker.commerce.price(),
-        imagen: faker.image.imageUrl(),
-        isBlocked: faker.datatype.boolean(),
-      });
-    }
-  }
 
   async create(data) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const newProduct = {
-          id: faker.datatype.uuid(),
-          ...data,
-        };
-        this.products.push(newProduct);
-        resolve(newProduct);
-      }, 300);
-    });
+    const newProduct = await models.Product.create(data);
+    return newProduct;
   }
 
-  find() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.products);
-      }, 300);
+  async find() {
+    const productos = await models.Product.findAll({
+      include: ['category'],
     });
+    return productos;
   }
 
   findOne(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-      const product = this.products.find((item) => item.id === id)
-      if (!product) {
-        reject(boom.notFound("Product not found"));
-      }
-      //error de lógica de negocio: si el producto está bloqueado, no se puede mostrar
-      else if (product.isBlocked) {
-        reject(boom.conflict("Product is blocked"));
-      }
-      resolve(product);
-      }, 300);
-    });
+
   }
 
   update(id, changes) {

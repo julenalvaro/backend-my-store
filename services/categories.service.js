@@ -1,59 +1,25 @@
-const faker = require("faker");
 const boom = require("@hapi/boom");
 
+const { models } = require('../libs/sequelize');
+
 class CategoriesService {
-  constructor() {
-    this.categories = [];
-    this.generateRandomCategories();
+
+  async create(data) {
+    const newCategory = await models.Category.create(data);
+    return newCategory;
   }
 
-  generateRandomCategories() {
-    const limit = 10;
-    const categories = [
-      "Electrónica",
-      "Hogar y cocina",
-      "Ropa y accesorios",
-      "Salud y cuidado personal",
-      "Juguetes y juegos",
-    ];
-    for (let index = 0; index < limit; index++) {
-      this.categories.push({
-        id: faker.datatype.uuid(),
-        nombre: categories[index],
-        descripcion: faker.lorem.sentence(),
-      });
-    }
+  async find() {
+    const data = await models.Category.findAll();
+    return data;
   }
 
-  create(data) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const newCategory = {
-          id: faker.datatype.uuid(),
-          ...data,
-        };
-        this.categories.push(newCategory);
-        resolve(newCategory);
-      }, 300);
+  async findOne(id) {
+    const categoryProducts = await models.Category.findByPk(id, {
+      include: ['products'],
     });
-  }
-  find() {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.categories);
-      }, 300);
-    });
-  }
-  findOne(id) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const category = this.categories.find((item) => item.id === id);
-        if (!category) {
-          reject(boom.notFound("Category not found"));
-        }
-        resolve(category);
-      }, 300);
-    });
+
+    return categoryProducts;
   }
   update(id, changes) {
     return new Promise((resolve, reject) => {

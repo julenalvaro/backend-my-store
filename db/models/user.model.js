@@ -46,8 +46,11 @@ const UserSchema = {
 
 class User extends Model {
   //creamos métodos estáticos para hacer queries
-  static associate(){
-    //relaciones
+  static associate(models){
+    this.hasOne(models.Customer, {
+      as: 'customer',
+      foreignKey: 'userId',
+    });
   }
 
   static config(sequelize){

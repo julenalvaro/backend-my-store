@@ -1,9 +1,11 @@
 const { Model, DataTypes } = require('sequelize');
+const { CATEGORY_TABLE } = require('./category.model');
 
 const PRODUCTS_TABLE = 'products';
 
 const ProductSchema = {
   id: {
+    unique: true,
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -24,15 +26,32 @@ const ProductSchema = {
       isUrl: true,
     },
   },
+  descripcion: {
+    type: DataTypes.STRING(140),
+    allowNull: false,
+  },
   isBlocked: {
+    field: 'is_blocked',
     type: DataTypes.BOOLEAN,
     allowNull: false,
+  },
+  categoryId: {
+    field: 'category_id',
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: CATEGORY_TABLE,
+      key: 'id',
+    },
   },
 };
 
 class Product extends Model {
-  static associate() {
-    //relaciones
+  static associate(models) {
+    this.belongsTo(models.Category, {
+      as: 'category',
+
+    });
   }
 
   static config(sequelize) {
