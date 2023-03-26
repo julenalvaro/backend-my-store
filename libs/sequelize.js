@@ -20,7 +20,4 @@ const sequelize = new Sequelize(URI, {
 // importar los modelos
 setupModels(sequelize);
 
-//crear las tablas en la BD según el modelo
-sequelize.sync();
-
 module.exports = sequelize;
