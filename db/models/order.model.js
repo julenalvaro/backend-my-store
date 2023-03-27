@@ -24,6 +24,19 @@ const OrderSchema = {
       key: 'id',
     },
   },
+  total: {
+    //campo virtual que se calcula en base a la tabla intermedia
+    type: DataTypes.VIRTUAL,
+    get() {
+      //ir a todos los productos de la tabla intermedia que pertenecen a este pedido y sumar los precios * cantidad de cada uno
+      if(this.products) {
+        return this.products.reduce((total, product) => {
+          return total + product.precio * product.OrderProduct.cantidad;
+        }, 0);
+      }
+      return 0;
+    }
+  },
 };
 
 class Order extends Model {
