@@ -16,8 +16,14 @@ class ProductsService {
     return productos;
   }
 
-  findOne(id) {
-
+  async findOne(id) {
+    const producto = await models.Product.findByPk(id, {
+      include: ['category'],
+    });
+    if (!producto) {
+      throw boom.notFound("Product not found");
+    }
+    return producto;
   }
 
   update(id, changes) {

@@ -1,7 +1,7 @@
 const express = require("express");
 const OrdersService = require("../services/orders.service");
 
-const { createOrderSchema, updateOrderSchema, getOrderSchema } = require("../schemas/orders.scheme");
+const { createOrderSchema, getOrderSchema, addItemSchema } = require("../schemas/orders.scheme");
 const validationHandler = require("../middlewares/validator.handler");
 
 const router = express.Router();
@@ -40,15 +40,13 @@ router.post("/",
   }
 });
 
-router.patch("/:id",
-  validationHandler(getOrderSchema, 'params'),
-  validationHandler(updateOrderSchema, 'body'),
+router.post("/add-item",
+  validationHandler(addItemSchema, 'body'),
   async (req, res, next) => {
   try {
-    const { id } = req.params;
     const { body } = req;
-    const order = await service.update(id, body);
-    res.json(order);
+    const newItem = await service.addItem(body);
+    res.status(201).json(newItem);
   } catch (error) {
     next(error)
   }
@@ -65,5 +63,7 @@ router.delete("/:id",
     next(error)
   }
 });
+
+
 
 module.exports = router;

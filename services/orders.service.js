@@ -1,6 +1,7 @@
 const faker = require("faker");
 const boom = require("@hapi/boom");
 const { models } = require("../libs/sequelize");
+const { OrderProduct } = require("../db/models/order-product.model");
 
 class OrdersService {
 
@@ -20,6 +21,9 @@ class OrdersService {
         {
           association: "customer",
           include: ["user"]
+        },
+        {
+          association: "products",
         }
       ]
     });
@@ -29,10 +33,14 @@ class OrdersService {
     return order;
   }
 
-  async update(id, changes) {
-    const order = await this.fincOne(id);
-    const updatedOrder = await order.update(changes);
-    return updatedOrder;
+  async addItem(data) {
+    const order = await this.findOne(data.orderId);
+    const product = await models.Product.findByPk(data.productId);
+    if (!product) {
+      throw boom.notFound("Product not found");
+    }
+    await models.OrderProduct.create(data);
+    return data;
   }
 
   async delete(id) {
