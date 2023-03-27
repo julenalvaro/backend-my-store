@@ -8,6 +8,9 @@ const descripcion = Joi.string().min(10).max(140);
 const isBlocked = Joi.boolean();
 const categoryId = Joi.number().min(1);
 
+const limit = Joi.number().min(1).max(100);
+const offset = Joi.number().min(0);
+
 const createProductSchema = Joi.object({
   nombre: nombre.required(),
   precio: precio.required(),
@@ -30,4 +33,9 @@ const getProductSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createProductSchema, updateProductSchema, getProductSchema };
+const pageProductSchema = Joi.object({
+  limit: limit,
+  offset: offset,
+});
+
+module.exports = { createProductSchema, updateProductSchema, getProductSchema, pageProductSchema };
