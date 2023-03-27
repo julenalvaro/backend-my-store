@@ -1,88 +1,40 @@
 const faker = require("faker");
 const boom = require("@hapi/boom");
+const { models } = require("../libs/sequelize");
 
 class OrdersService {
-  constructor() {
-    this.orders = [];
-    this.generateRandomOrders();
+
+  async create(data) {
+    const newOrder = await models.Order.create(data);
+    return newOrder;
   }
 
-  generateRandomOrders() {
-    const limit = 50;
-    for (let index = 0; index < limit; index++) {
-      this.orders.push({
-        id: faker.datatype.uuid(),
-        fecha: faker.date.recent(),
-        usuarioId: faker.datatype.uuid(),
-        total: faker.commerce.price(),
-      });
+  async find() {
+    const data = await models.Order.findAll();
+    return data;
+  }
+
+  async findOne(id) {
+    const order = await models.Order.findByPk(id, {
+      include: ['customer'],
+    });
+    if (!order) {
+      throw boom.notFound("Order not found");
     }
+    return order;
   }
 
-  create(data) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        const newOrder = {
-          id: faker.datatype.uuid(),
-          ...data,
-        };
-        this.orders.push(newOrder);
-        resolve (newOrder);
-      }, 300);
-    });
+  async update(id, changes) {
+    const order = await this.fincOne(id);
+    const updatedOrder = await order.update(changes);
+    return updatedOrder;
   }
 
-  find() {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        resolve (this.orders);
-      }, 300);
-    });
+  async delete(id) {
+    const order = await this.findOne(id);
+    await order.destroy();
+    return order;
   }
-
-  findOne(id) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        const order = this.orders.find((item) => item.id === id);
-        if (!order) {
-          reject (boom.notFound("Order not found"));
-        }
-        resolve (order);
-      }, 300);
-    });
-  }
-
-  update(id, changes) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        const index = this.orders.findIndex((item) => item.id === id);
-        if (index === -1) {
-          reject (boom.notFound("Order not found"));
-        }
-        const order = this.orders[index];
-        this.orders[index] = {
-          ...order,
-          ...changes,
-        };
-        resolve (this.orders[index]);
-      }, 300);
-    });
-
-  }
-
-  delete(id) {
-    return new Promise ((resolve, reject) => {
-      setTimeout(() => {
-        const index = this.orders.findIndex((item) => item.id === id);
-        if (index === -1) {
-          reject (boom.notFound("Order not found"));
-        }
-        this.orders.splice(index, 1);
-        resolve ({ id });
-      }, 300);
-    });
-  }
-
 }
 
 module.exports = OrdersService;

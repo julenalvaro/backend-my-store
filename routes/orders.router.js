@@ -7,7 +7,7 @@ const validationHandler = require("../middlewares/validator.handler");
 const router = express.Router();
 const service = new OrdersService();
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const orders = await service.find();
     res.json(orders);
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id",
   validationHandler(getOrderSchema, 'params'),
-  async (req, res) => {
+  async (req, res, next) => {
   try {
     const { id } = req.params;
     const order = await service.findOne(id);
@@ -30,7 +30,7 @@ router.get("/:id",
 
 router.post("/",
   validationHandler(createOrderSchema, 'body'),
-  async (req, res) => {
+  async (req, res, next) => {
   try {
     const { body } = req;
     const newOrder = await service.create(body);
@@ -43,7 +43,7 @@ router.post("/",
 router.patch("/:id",
   validationHandler(getOrderSchema, 'params'),
   validationHandler(updateOrderSchema, 'body'),
-  async (req, res) => {
+  async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -56,7 +56,7 @@ router.patch("/:id",
 
 router.delete("/:id",
   validationHandler(getOrderSchema, 'params'),
-  async (req, res) => {
+  async (req, res, next) => {
   try {
     const { id } = req.params;
     const rta = await service.delete(id);

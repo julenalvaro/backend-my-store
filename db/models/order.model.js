@@ -1,11 +1,12 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, Sequelize } = require('sequelize');
+const { CUSTOMER_TABLE } = require('./customer.model');
 
 const ORDER_TABLE = 'orders';
 
 const OrderSchema = {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
     primaryKey: true,
     allowNull: false,
   },
@@ -14,13 +15,14 @@ const OrderSchema = {
     allowNull: false,
     defaultValue: DataTypes.NOW,
   },
-  usuarioId: {
-    type: DataTypes.INTEGER,
+  customerId: {
+    type: DataTypes.UUID,
+    field: 'customer_id',
     allowNull: false,
-    // references: {
-    //   model: 'users',
-    //   key: 'id',
-    // },
+    references: {
+      model: CUSTOMER_TABLE,
+      key: 'id',
+    },
   },
   total: {
     type: DataTypes.INTEGER,
@@ -29,10 +31,9 @@ const OrderSchema = {
 };
 
 class Order extends Model {
-  // static associate(models) {
-  //   Order.belongsTo(models.User, { foreignKey: 'usuarioId', as: 'usuario' });
-  //   Order.hasMany(models.OrderProduct, { foreignKey: 'ordenId', as: 'productos' });
-  // }
+  static associate(models) {
+    Order.belongsTo(models.Customer, { as: 'customer' });
+  }
 
   static config(sequelize) {
     return {
