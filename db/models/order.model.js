@@ -24,10 +24,6 @@ const OrderSchema = {
       key: 'id',
     },
   },
-  total: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
 };
 
 class Order extends Model {
