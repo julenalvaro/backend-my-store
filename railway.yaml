@@ -1,0 +1,13 @@
+version: 1
+env: node
+services:
+  app:
+    build:
+      base: node:16
+      commands:
+        - npm install
+        - npm run build
+    run:
+      env:
+        NODE_ENV: production
+      command: npm run start
