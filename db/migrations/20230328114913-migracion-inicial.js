@@ -14,7 +14,6 @@ module.exports = {
     await queryInterface.createTable(CUSTOMER_TABLE, CustomerSchema);
     await queryInterface.createTable(CATEGORY_TABLE, CategorySchema);
     await queryInterface.createTable(PRODUCTS_TABLE, ProductSchema);
-    await queryInterface.createTable(ORDER_PRODUCT_TABLE, OrderProductSchema);
 
     //La parte de orders tiene campos ficticios, hay que hacerla sin ellos:
     await queryInterface.createTable(ORDER_TABLE, {
@@ -39,6 +38,7 @@ module.exports = {
         },
       },
     });
+    await queryInterface.createTable(ORDER_PRODUCT_TABLE, OrderProductSchema);
   },
 
   async down (queryInterface) {
