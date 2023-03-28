@@ -8,7 +8,7 @@ const numTarjeta = Joi.string()
 const nombre = Joi.string().min(3).max(15);
 const email = Joi.string().email();
 const edad = Joi.number().min(18).max(80);
-const password = Joi.string().min(8).max(20);
+const password = Joi.string();
 
 const createCustomerSchema = Joi.object({
   dirPostal: dirPostal.required(),

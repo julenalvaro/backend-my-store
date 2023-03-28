@@ -1,6 +1,7 @@
 const faker = require("faker");
 const boom = require("@hapi/boom");
 const { models } = require("./../libs/sequelize");
+const bcrypt = require("bcrypt");
 
 
 class UsersService {
@@ -23,8 +24,14 @@ class UsersService {
   }
 
   async create(data) {
-    const newUser = await models.User.create(data);
-    return newUser;
+    const hash = await bcrypt.hash(data.password, 10);
+    const newUser = await models.User.create({
+      ...data,
+      password: hash,
+  });
+    //devolvemos el newUser pero sin el password
+    const { password, ...userData } = newUser.dataValues;
+    return userData;
   }
 
   async find() {
@@ -39,6 +46,7 @@ class UsersService {
     if (!user) {
       throw boom.notFound("User not found");
     }
+    //devolvemos el usuario sin la password
     return user;
   }
 

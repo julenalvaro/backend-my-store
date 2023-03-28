@@ -21,9 +21,6 @@ const UserSchema = {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      len: [8, 20],
-    },
   },
   role: {
     type: DataTypes.STRING,
