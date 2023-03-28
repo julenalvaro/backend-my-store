@@ -6,7 +6,7 @@ services:
       base: node:16
       commands:
         - npm install
-        - npm run build
+        - npm run migrations:run
     run:
       env:
         NODE_ENV: production
