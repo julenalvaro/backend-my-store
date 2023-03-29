@@ -22,6 +22,14 @@ class CustomersService {
     return data;
   }
 
+  async findByUser(id) {
+    const customer = await models.Customer.findOne({
+      where: { userId: id },
+      include: ['user'],
+    });
+    return customer;
+  }
+
   async findOne(id) {
     const customer = await models.Customer.findByPk(id, {
       include: ['user'],
