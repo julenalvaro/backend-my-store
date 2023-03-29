@@ -9,6 +9,7 @@ const nombre = Joi.string().min(3).max(15);
 const email = Joi.string().email();
 const edad = Joi.number().min(18).max(80);
 const password = Joi.string();
+const role = Joi.string();
 
 const createCustomerSchema = Joi.object({
   dirPostal: dirPostal.required(),
@@ -18,6 +19,7 @@ const createCustomerSchema = Joi.object({
     email: email.required(),
     edad: edad.required(),
     password: password.required(),
+    role: role,
   }),
 });
 

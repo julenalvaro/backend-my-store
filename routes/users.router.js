@@ -2,6 +2,7 @@ const express = require("express");
 const UsersService = require("../services/users.service");
 const { createUserSchema, updateUserSchema, getUserSchema } = require("../schemas/users.scheme");
 const validatorHandler = require("../middlewares/validator.handler");
+const passport = require("passport");
 
 const router = express.Router();
 const service = new UsersService();

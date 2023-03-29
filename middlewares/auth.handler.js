@@ -10,4 +10,17 @@ function checkApiKey(req, res, next) {
   }
 }
 
-module.exports = { checkApiKey };
+//fábrica de funciones de chequeo de roles
+
+function checkRoles(roles) {
+  return function (req, res, next) {
+    user = req.user;
+    if (!user || !roles.includes(user.role)) {
+      next(boom.forbidden('No tienes permiso para realizar esta acción'));
+    } else {
+      next();
+    }
+  };
+}
+
+module.exports = { checkApiKey, checkRoles };

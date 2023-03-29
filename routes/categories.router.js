@@ -3,6 +3,8 @@ const CategoriesService = require("../services/categories.service");
 const { createCategorySchema, updateCategorySchema, getCategorySchema } = require("../schemas/categories.scheme");
 const validationHandler = require("../middlewares/validator.handler");
 const { valid } = require("joi");
+const passport = require("passport");
+const { checkRoles } = require("../middlewares/auth.handler");
 
 const router = express.Router();
 const service = new CategoriesService();
@@ -29,6 +31,9 @@ router.get('/:id',
 });
 
 router.post('/',
+//el manejo de sesion es con cookies, nosotros estamos usando tokens
+  passport.authenticate('jwt', { session: false }),
+  checkRoles(['admin']),
   validationHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
   try {
@@ -41,6 +46,7 @@ router.post('/',
 });
 
 router.patch('/:id',
+  passport.authenticate('jwt', { session: false }),
   validationHandler(getCategorySchema, 'params'),
   validationHandler(updateCategorySchema, 'body'),
   async (req, res, next) => {
@@ -55,6 +61,7 @@ router.patch('/:id',
 });
 
 router.delete('/:id',
+  passport.authenticate('jwt', { session: false }),
   validationHandler(getCategorySchema, 'params'),
   async (req, res, next) => {
   try {

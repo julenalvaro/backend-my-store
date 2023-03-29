@@ -16,6 +16,8 @@ app.use(cors(
   // {origin: ["http://localhost:3003","http://127.0.0.1:5500"]}
 ));
 
+require('./utils/auth');
+
 app.get("/", (req, res) =>{
   res.send("Hola mi server en express");
 });
