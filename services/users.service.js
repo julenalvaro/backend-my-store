@@ -5,23 +5,6 @@ const bcrypt = require("bcrypt");
 
 
 class UsersService {
-  constructor() {
-    this.users = [];
-    this.generateRandomUsers();
-  }
-
-  generateRandomUsers() {
-    const limit = 100;
-    for (let index = 0; index < limit; index++) {
-      this.users.push({
-        id: faker.datatype.uuid(),
-        nombre: faker.name.findName(),
-        email: faker.internet.email(),
-        edad: faker.datatype.number({ min: 18, max: 80 }),
-        fecha_ingreso: faker.date.past()
-      });
-    }
-  }
 
   async create(data) {
     const hash = await bcrypt.hash(data.password, 10);
