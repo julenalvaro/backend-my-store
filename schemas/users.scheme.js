@@ -5,7 +5,7 @@ const nombre = Joi.string().min(3).max(15);
 const email = Joi.string().email();
 const edad = Joi.number().min(18).max(80);
 const fecha_ingreso = Joi.date();
-const password = Joi.string().min(8).max(20);
+const password = Joi.string();
 const role = Joi.string();
 
 const createUserSchema = Joi.object({
@@ -29,4 +29,8 @@ const getUserSchema = Joi.object({
   id: id.required(),
 });
 
-module.exports = { createUserSchema, updateUserSchema, getUserSchema };
+const recoverEmailSchema = Joi.object({
+  email: email.required(),
+});
+
+module.exports = { recoverEmailSchema, createUserSchema, updateUserSchema, getUserSchema };

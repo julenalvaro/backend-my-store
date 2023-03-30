@@ -33,6 +33,24 @@ class OrdersService {
     return order;
   }
 
+  async findByUser(id) {
+    let user = await models.User.findByPk(id);
+    user = user.dataValues;
+    const orders = await models.Order.findAll({
+      include: [
+        {
+          association: 'customer',
+          where: { userId: id },
+          include: ['user'],
+        },
+        {
+          association: 'products',
+        },
+      ],
+    });
+    return orders;
+  }
+
   async addItem(data) {
     const order = await this.findOne(data.orderId);
     const product = await models.Product.findByPk(data.productId);

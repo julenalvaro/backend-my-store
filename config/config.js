@@ -9,7 +9,12 @@ const config = {
   dbHost: process.env.DB_HOST,
   dbName: process.env.DB_NAME,
   dbPort: process.env.DB_PORT,
-  dbUrl: process.env.DATABASE_URL
+  dbUrl: process.env.DATABASE_URL,
+  apiKey: process.env.API_KEY,
+  secret: process.env.JWT_SECRET,
+  nodemailerUser: process.env.NODEMAILER_USER,
+  nodemailerPass: process.env.NODEMAILER_PASS,
+  nodemailerHost: process.env.NODEMAILER_HOST,
 }
 
 module.exports = { config };

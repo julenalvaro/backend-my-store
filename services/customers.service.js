@@ -1,19 +1,33 @@
 const boom = require("@hapi/boom");
 const { models } = require("../libs/sequelize");
+const bcrypt = require('bcrypt');
 
 
 class CustomersService {
 
   async create(data) {
-    const newCustomer = await models.Customer.create(data, {
-      include: ['user'],
-    });
-    return newCustomer;
+    const hashedPassword = await bcrypt.hash(data.user.password, 10);
+    data.user.password = hashedPassword;
+    const newCustomer = await models.Customer.create(data, { include: ['user'] });
+
+    //devolvemos el newCustomer pero sin el password
+    const { password, ...userData } = newCustomer.user.dataValues;
+    newCustomer.user.dataValues = userData;
+
+    return newCustomer.dataValues;
   }
 
   async find() {
     const data = await models.Customer.findAll();
     return data;
+  }
+
+  async findByUser(id) {
+    const customer = await models.Customer.findOne({
+      where: { userId: id },
+      include: ['user'],
+    });
+    return customer;
   }
 
   async findOne(id) {

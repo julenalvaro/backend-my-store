@@ -21,9 +21,11 @@ const UserSchema = {
   password: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      len: [8, 20],
-    },
+  },
+  recoveryToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    field: 'recovery_token',
   },
   role: {
     type: DataTypes.STRING,

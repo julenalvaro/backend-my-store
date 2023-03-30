@@ -3,6 +3,7 @@ const cors = require("cors"); // Importa el middleware cors
 const routerApi = require("./routes"); //index es el archivo por defecto
 const { logErrors, boomErrorHandler, errorHandler, sequelizeErrorHandler } = require("./middlewares/error.handler");
 require('dotenv').config();
+const { checkApiKey } = require("./middlewares/auth.handler");
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -15,8 +16,16 @@ app.use(cors(
   // {origin: ["http://localhost:3003","http://127.0.0.1:5500"]}
 ));
 
+require('./utils/auth');
+
 app.get("/", (req, res) =>{
   res.send("Hola mi server en express");
+});
+
+app.get("/nueva-ruta",
+  checkApiKey,
+  (req, res) =>{
+  res.send("Hola soy una nueva ruta");
 });
 
 routerApi(app);
